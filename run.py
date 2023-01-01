@@ -26,7 +26,7 @@ get_data:
 
 BNU = BNU_session.Session(
     usr='202221061068',
-    pwd='wanghaiteng0410',
+    pwd='',
     date="'2023-01-03'",
     sport=1,
     stime=16,
