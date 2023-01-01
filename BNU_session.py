@@ -81,7 +81,7 @@ class Session(object):
     def check_page(self):
         alert_item = self.driver.find_elements(by=By.XPATH, value='//div[@class="alert alert-error fade in"]')
         while len(alert_item) != 0:
-            time.sleep(0.1)
+            time.sleep(0.05)
             self.driver.refresh()
             alert_item = self.driver.find_elements(by=By.XPATH, value='//div[@class="alert alert-error fade in"]')
             print("Page not open!")
