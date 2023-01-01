@@ -1,5 +1,5 @@
 import BNU_session
-
+import os
 """
 
 usr:校园网账号
@@ -22,6 +22,9 @@ position(场地)：
 get_data:
     不进行最后一步的确认，只保存验证码为了模型训练  
 """
+
+if not os.path.exists('./Valid_pic'):
+    os.mkdir('./Valid_pic')
 
 
 BNU = BNU_session.Session(
