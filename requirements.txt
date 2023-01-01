@@ -1,0 +1,3 @@
+ddddocr==1.4.7
+Pillow==9.2.0
+selenium==4.7.2
