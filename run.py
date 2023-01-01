@@ -34,7 +34,7 @@ BNU = BNU_session.Session(
     sport=1,
     stime=16,
     position=1,
-    get_data=True)
+    get_data=False)
 BNU.run()
 
 
