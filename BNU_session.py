@@ -15,7 +15,7 @@ from selenium.webdriver.common.by import By
 
 class Session(object):
     """
-    BNU 抢课
+    BNU 抢羽毛球
     """
     def __init__(self, usr, pwd, date, sport, stime, position, get_data=False):
         self.username = 'BNU'
