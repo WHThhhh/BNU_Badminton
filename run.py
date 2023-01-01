@@ -29,8 +29,8 @@ BNU = BNU_session.Session(
     pwd='wanghaiteng0410',
     date="'2023-01-03'",
     sport=1,
-    stime=16,
-    position=2,
+    stime=12,
+    position=1,
     get_data=True)
 BNU.run()
 

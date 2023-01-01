@@ -17,7 +17,6 @@ class Session(object):
     """
     BNU 抢课
     """
-
     def __init__(self, usr, pwd, date, sport, stime, position, get_data=False):
         self.username = 'BNU'
         self.username = str(usr)
@@ -38,17 +37,19 @@ class Session(object):
         self.get_GYM_page()
         self.check_page()
         self.select_time()
-        while self.get_data:
+        while True:
             is_valid, now, valid_str = self.get_valid()
             while not is_valid:
                 self.driver.refresh()
-                time.sleep(0.2)
+                time.sleep(0.1)
                 self.select_time()
                 is_valid, now, valid_str = self.get_valid()
             with open('./Valid_pic/' + now + '.txt', 'a+') as ans:
                 ans.write(valid_str)
+            if not self.get_data:
+                break
             self.driver.refresh()
-            time.sleep(0.2)
+            time.sleep(0.1)
             self.select_time()
 
         self.success()
@@ -63,18 +64,18 @@ class Session(object):
         pw_input.send_keys(self.password)
         login_btn = self.driver.find_element(by=By.CLASS_NAME, value='landing_btn_bg1')
         login_btn.click()
-        time.sleep(0.5)
+        time.sleep(0.1)
         return
 
     def get_GYM_page(self):
         GYM_btn = self.driver.find_element(by=By.XPATH, value='//*[@app_code="tygglyyxt"]/div/span')
         GYM_btn.click()
-        time.sleep(0.5)
+        time.sleep(0.1)
         handles = self.driver.window_handles
         self.driver.switch_to.window(handles[1])
         GYM_Agree = self.driver.find_element(by=By.CLASS_NAME, value='btn')
         GYM_Agree.click()
-        time.sleep(0.5)
+        time.sleep(0.1)
         return
 
     def check_page(self):
@@ -90,18 +91,17 @@ class Session(object):
         js_script = "javascript:this.top.vpn_inject_scripts_window(this);vpn_eval((function () { chooseItem('2'," + \
                     self.sport + "," + self.Appointment_time + "); }).toString().slice(14, -2))"
         self.driver.execute_script(js_script)
-        time.sleep(1)
+        time.sleep(0.1)
         choose_table = self.driver.find_element(by=By.XPATH, value='//iframe[@name="overlayView"]')
         self.driver.switch_to.frame(choose_table)
         choose = self.driver.find_element(by=By.XPATH, value='/html/body/table/tbody/tr[' +
                                                              self.stime + ']/td[' + self.position + ']')
         choose.click()
-        time.sleep(0.1)
         handles = self.driver.window_handles
         self.driver.switch_to.window(handles[1])
         appoint = self.driver.find_element(by=By.XPATH, value='//span[@class="btn btn-success fileinput-button"]')
         appoint.click()
-        time.sleep(0.5)
+        time.sleep(0.1)
         return
 
     def get_valid(self):
@@ -131,10 +131,14 @@ class Session(object):
         res = self.ocr.classification(img_bytes)
         res = res[:-1]
         symbol = ['+', '-']
+        if '=' in res:
+            res = res.replace('=', '')
         print(res)
         for i_s, s in enumerate(symbol):
             if s in res:
                 num = res.split(s)
+                if len(num[1]) == 0 or len(num[1]) == 0:
+                    break
                 if i_s == 0:
                     ans = int(num[0]) + int(num[1])
                 else:
@@ -159,9 +163,11 @@ class Session(object):
     def send_check(self, ans):
         ans_input = self.driver.find_element(by=By.XPATH, value='//input[@id="checkcodeuser"]')
         # ans_input = self.driver.find_element(by=By.XPATH, value='/html/body/div[1]/form/div[3]/label/div/input')
-        print(ans_input)
         ans_input.clear()
-        ans_input.send_keys(str(ans))
-        time.sleep(1.5)
+        ans = str(ans)
+        for a_ in ans:
+            ans_input.send_keys(a_)
+            time.sleep(0.05)
+        time.sleep(0.1)
         color = self.driver.find_element(by=By.XPATH, value='//em[@id="msginfo"]').get_attribute('class')
         return color == "greencolor"
