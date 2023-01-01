@@ -167,7 +167,7 @@ class Session(object):
         ans = str(ans)
         for a_ in ans:
             ans_input.send_keys(a_)
-            time.sleep(0.05)
-        time.sleep(0.1)
+            time.sleep(0.02)
+        time.sleep(0.05)
         color = self.driver.find_element(by=By.XPATH, value='//em[@id="msginfo"]').get_attribute('class')
         return color == "greencolor"
