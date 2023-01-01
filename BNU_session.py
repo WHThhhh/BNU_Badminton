@@ -38,15 +38,20 @@ class Session(object):
         self.get_GYM_page()
         self.check_page()
         self.select_time()
-        is_valid, now, valid_str = self.get_valid()
-        while not is_valid:
+        while self.get_data:
+            is_valid, now, valid_str = self.get_valid()
+            while not is_valid:
+                self.driver.refresh()
+                time.sleep(0.2)
+                self.select_time()
+                is_valid, now, valid_str = self.get_valid()
+            with open('./Valid_pic/' + now + '.txt', 'a+') as ans:
+                ans.write(valid_str)
             self.driver.refresh()
             time.sleep(0.2)
-            is_valid, now, valid_str = self.get_valid()
-        with open('./Valid_pic/' + now + '.txt', 'a+') as ans:
-            ans.write(valid_str)
-        if not self.get_data:
-            self.success()
+            self.select_time()
+
+        self.success()
     
     # 登录
     def ori_page_Login(self):
@@ -83,9 +88,9 @@ class Session(object):
 
     def select_time(self):
         js_script = "javascript:this.top.vpn_inject_scripts_window(this);vpn_eval((function () { chooseItem('2'," + \
-                    self.sport, + self.Appointment_time + "); }).toString().slice(14, -2))"
+                    self.sport + "," + self.Appointment_time + "); }).toString().slice(14, -2))"
         self.driver.execute_script(js_script)
-        time.sleep(0.3)
+        time.sleep(1)
         choose_table = self.driver.find_element(by=By.XPATH, value='//iframe[@name="overlayView"]')
         self.driver.switch_to.frame(choose_table)
         choose = self.driver.find_element(by=By.XPATH, value='/html/body/table/tbody/tr[' +
@@ -139,6 +144,7 @@ class Session(object):
                     return True, str(num[0]) + s + str(num[1])
 
         res = ''.join(re.findall(r"\d+", res))
+
         for i in range(len(res) - 1):
             n_1 = int(res[:i + 1])
             n_2 = int(res[i + 1:])
@@ -152,8 +158,10 @@ class Session(object):
 
     def send_check(self, ans):
         ans_input = self.driver.find_element(by=By.XPATH, value='//input[@id="checkcodeuser"]')
+        # ans_input = self.driver.find_element(by=By.XPATH, value='/html/body/div[1]/form/div[3]/label/div/input')
+        print(ans_input)
         ans_input.clear()
         ans_input.send_keys(str(ans))
-        time.sleep(0.2)
+        time.sleep(1.5)
         color = self.driver.find_element(by=By.XPATH, value='//em[@id="msginfo"]').get_attribute('class')
         return color == "greencolor"
