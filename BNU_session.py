@@ -64,18 +64,18 @@ class Session(object):
         pw_input.send_keys(self.password)
         login_btn = self.driver.find_element(by=By.CLASS_NAME, value='landing_btn_bg1')
         login_btn.click()
-        time.sleep(0.1)
+        time.sleep(0.5)
         return
 
     def get_GYM_page(self):
         GYM_btn = self.driver.find_element(by=By.XPATH, value='//*[@app_code="tygglyyxt"]/div/span')
         GYM_btn.click()
-        time.sleep(0.1)
+        time.sleep(0.5)
         handles = self.driver.window_handles
         self.driver.switch_to.window(handles[1])
         GYM_Agree = self.driver.find_element(by=By.CLASS_NAME, value='btn')
         GYM_Agree.click()
-        time.sleep(0.1)
+        time.sleep(0.5)
         return
 
     def check_page(self):

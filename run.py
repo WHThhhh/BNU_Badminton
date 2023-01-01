@@ -1,9 +1,16 @@
 import BNU_session
 import os
-"""
+import schedule
+import time
 
+"""
 usr:校园网账号
 pwd:校园网密码
+
+run_time:
+    几点开始抢
+    建议提前1-2min
+    ie. 7:29
 
 sport：
     羽毛球：1
@@ -26,6 +33,7 @@ get_data:
 if not os.path.exists('./Valid_pic'):
     os.mkdir('./Valid_pic')
 
+run_time = "7:29"
 
 BNU = BNU_session.Session(
     usr='202221061068',
@@ -35,7 +43,12 @@ BNU = BNU_session.Session(
     stime=16,
     position=1,
     get_data=False)
-BNU.run()
+
+schedule.every().day.at(run_time).do(BNU.run)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
 
 
 
