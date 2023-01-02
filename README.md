@@ -9,4 +9,4 @@
 
 (Chrome版本：在Chrome浏览器中输入地址 chrome://version/)
 
-放在chromedriver文件夹下(一定只放一个文件！！)
+放在chromedriver文件夹下(自己新建一个，里面一定只放一个文件！！)
