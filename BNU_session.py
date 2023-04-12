@@ -41,7 +41,7 @@ class Session(object):
             is_valid, now, valid_str = self.get_valid()
             while not is_valid:
                 self.driver.refresh()
-                time.sleep(0.1)
+                time.sleep(0.5)
                 self.select_time()
                 is_valid, now, valid_str = self.get_valid()
             with open('./Valid_pic/' + now + '.txt', 'a+') as ans:
@@ -70,10 +70,10 @@ class Session(object):
     def get_GYM_page(self):
         GYM_btn = self.driver.find_element(by=By.XPATH, value='//*[@app_code="tygglyyxt"]/div/span')
         GYM_btn.click()
-        time.sleep(0.5)
+        time.sleep(1)
         handles = self.driver.window_handles
         self.driver.switch_to.window(handles[1])
-        GYM_Agree = self.driver.find_element(by=By.CLASS_NAME, value='btn')
+        GYM_Agree = self.driver.find_element(by=By.XPATH, value='//*[@id="attentionModal"]/div[3]/button')
         GYM_Agree.click()
         time.sleep(0.5)
         return
@@ -88,25 +88,24 @@ class Session(object):
         return
 
     def select_time(self):
-        js_script = "javascript:this.top.vpn_inject_scripts_window(this);vpn_eval((function () { chooseItem('2'," + \
-                    self.sport + "," + self.Appointment_time + "); }).toString().slice(14, -2))"
+        js_script = "javascript: changeDate('2',"+ self.sport + ",'','3'," + self.Appointment_time + ");"
         self.driver.execute_script(js_script)
-        time.sleep(0.1)
+        time.sleep(0.5)
         choose_table = self.driver.find_element(by=By.XPATH, value='//iframe[@name="overlayView"]')
         self.driver.switch_to.frame(choose_table)
-        choose = self.driver.find_element(by=By.XPATH, value='/html/body/table/tbody/tr[' +
-                                                             self.stime + ']/td[' + self.position + ']')
+        choose = self.driver.find_element(by=By.XPATH, value='/html/body/table/tbody/tr[{}]/td[{}]'.format(self.stime, self.position))
         choose.click()
+        # time.sleep(0.5)
         handles = self.driver.window_handles
         self.driver.switch_to.window(handles[1])
         appoint = self.driver.find_element(by=By.XPATH, value='//span[@class="btn btn-success fileinput-button"]')
         appoint.click()
-        time.sleep(0.1)
+        time.sleep(0.5)
         return
 
     def get_valid(self):
         js = "let c = document.createElement('canvas');let ctx = c.getContext('2d');" \
-             "let img = document.getElementsByTagName('img')[1]; /*找到图片*/ " \
+             "let img = document.getElementsByTagName('img')[1];" \
              "c.height=img.naturalHeight;c.width=img.naturalWidth;" \
              "ctx.drawImage(img, 0, 0,img.naturalWidth, img.naturalHeight);" \
              "let base64String = c.toDataURL();return base64String;"
@@ -121,7 +120,10 @@ class Session(object):
         return is_valid, now, valid_str
 
     def success(self):
-        self.driver.find_element(by=By.XPATH, value='//a[@class="btn ui-link"]').click()
+        self.driver.find_element(by=By.XPATH, value='//*[@id="contactCompanion"]/div[3]/a[1]').click()
+       	time.sleep(1)
+        pay = self.driver.find_element(by=By.XPATH, value='//*[@id="div_pay"]/div[3]/a[2]')
+        pay.click()
         time.sleep(100)
         return
 

@@ -38,17 +38,18 @@ run_time = "7:29"
 BNU = BNU_session.Session(
     usr='202221061068',
     pwd='',
-    date="'2023-01-03'",
-    sport=1,
-    stime=16,
-    position=1,
+    date="'2023-04-15'",
+    sport=2,
+    stime=20,
+    position=2,
     get_data=False)
 
-schedule.every().day.at(run_time).do(BNU.run)
+# schedule.every().day.at(run_time).do(BNU.run)
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+#while True:
+BNU.run()
+   # schedule.run_pending()
+   # time.sleep(1)
 
 
 
