@@ -17,13 +17,14 @@ class Session(object):
     """
     BNU 抢羽毛球
     """
+
     def __init__(self, usr, pwd, date, sport, stime, position, get_data=False):
         self.username = 'BNU'
         self.username = str(usr)
         self.password = str(pwd)
         self.Appointment_time = date
         self.sport_list = ["'5326'", "'5462'", "'68788'"]
-        self.sport = self.sport_list[sport-1]
+        self.sport = self.sport_list[sport - 1]
         self.stime = str(stime - 6)
         self.position = str(position)
         self.ocr = ddddocr.DdddOcr()
@@ -31,7 +32,7 @@ class Session(object):
         self.driver = webdriver.Chrome(service=self.s_path)
         # just get valid data for model training
         self.get_data = get_data
-    
+
     def run(self):
         self.ori_page_Login()
         self.get_GYM_page()
@@ -53,7 +54,7 @@ class Session(object):
             self.select_time()
 
         self.success()
-    
+
     # 登录
     def ori_page_Login(self):
         url = "https://onevpn.bnu.edu.cn/"
@@ -88,12 +89,13 @@ class Session(object):
         return
 
     def select_time(self):
-        js_script = "javascript: changeDate('2',"+ self.sport + ",'','3'," + self.Appointment_time + ");"
+        js_script = "javascript: changeDate('2'," + self.sport + ",'','3'," + self.Appointment_time + ");"
         self.driver.execute_script(js_script)
         time.sleep(0.5)
         choose_table = self.driver.find_element(by=By.XPATH, value='//iframe[@name="overlayView"]')
         self.driver.switch_to.frame(choose_table)
-        choose = self.driver.find_element(by=By.XPATH, value='/html/body/table/tbody/tr[{}]/td[{}]'.format(self.stime, self.position))
+        choose = self.driver.find_element(by=By.XPATH, value='/html/body/table/tbody/tr[{}]/td[{}]'.format(self.stime,
+                                                                                                           self.position))
         choose.click()
         # time.sleep(0.5)
         handles = self.driver.window_handles
@@ -121,7 +123,7 @@ class Session(object):
 
     def success(self):
         self.driver.find_element(by=By.XPATH, value='//*[@id="contactCompanion"]/div[3]/a[1]').click()
-       	time.sleep(1)
+        time.sleep(1)
         pay = self.driver.find_element(by=By.XPATH, value='//*[@id="div_pay"]/div[3]/a[2]')
         pay.click()
         time.sleep(100)
