@@ -33,7 +33,7 @@ get_data:
 if not os.path.exists('./Valid_pic'):
     os.mkdir('./Valid_pic')
 
-run_time = "7:29"
+run_time = "14:45"
 
 BNU = BNU_session.Session(
     usr='202221061068',
@@ -44,12 +44,9 @@ BNU = BNU_session.Session(
     position=2,
     get_data=False)
 
-# schedule.every().day.at(run_time).do(BNU.run)
+schedule.every().day.at(run_time).do(BNU.run)
 
-#while True:
-BNU.run()
-   # schedule.run_pending()
-   # time.sleep(1)
-
-
-
+while True:
+    # BNU.run()
+    schedule.run_pending()
+    time.sleep(1)
